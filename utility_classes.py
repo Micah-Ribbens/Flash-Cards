@@ -33,13 +33,6 @@ class GameObject:
     name = ""
     attributes = []
 
-    def find_all_attributes(object):
-        attributes = []
-        for key in object.__dict__.keys():
-            if not key.__contains__("__") and not callable(key):
-                attributes.append(key)
-        return attributes
-
     # @property automatically changes this "attribute" when the x_coordinate or length changes
     # Can be treated as an attribute
     @property
@@ -65,69 +58,6 @@ class GameObject:
     def draw(self):
         pygame.draw.rect(game_window, (self.color), (self.x_coordinate,
                                                      self.y_coordinate, self.length, self.height))
-
-    def draw_circle(self):
-        pygame.draw.ellipse(game_window, self.color, (self.x_coordinate,
-                            self.y_coordinate, self.length, self.height))
-    # Purely for debugging purposes; so you can see the location and size of game objects
-
-    def str(self):
-        print(f"name {self.name} x {self.x_coordinate} y {self.y_coordinate} length {self.length} height {self.height} bottom {self.bottom} right_edge {self.right_edge}\n")
-
-    def draw_in_segments(object, segments):
-        GameObject.draw(object)
-        for segment in segments:
-            if segment.is_percentage:
-                x_coordinate = percentage_to_number(
-                    segment.amount_from_left, object.length) + object.x_coordinate
-                y_coordinate = percentage_to_number(
-                    segment.amount_from_top, object.height) + object.y_coordinate
-                height = percentage_to_number(
-                    segment.width_amount, object.height)
-                length = percentage_to_number(
-                    segment.length_amount, object.length)
-                GameObject.draw(GameObject(
-                    x_coordinate, y_coordinate, height, length, segment.color))
-
-
-class TimedEvent:
-    time_needed = 0
-    is_started = False
-    restarts_upon_completion = False
-    current_time = 0
-
-    def __init__(self, time_needed, restarts_upon_completion):
-        self.time_needed = time_needed
-        self.restarts_upon_completion = restarts_upon_completion
-
-    def is_done(self):
-        is_finished = self.is_started
-
-        if self.current_time < self.time_needed:
-            is_finished = False
-
-        if is_finished and self.restarts_upon_completion:
-            self.start()
-            self.current_time = 0
-
-        return is_finished
-
-    def run(self, reset_event, start_event):
-        if reset_event:
-            self.reset()
-
-        elif start_event:
-            self.start()
-
-        if self.is_started:
-            self.current_time += VelocityCalculator.time
-
-    def start(self):
-        self.is_started = True
-
-    def reset(self):
-        self.is_started = False
-        self.current_time = 0
 
 
 class HistoryKeeper:

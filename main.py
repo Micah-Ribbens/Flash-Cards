@@ -1,207 +1,126 @@
 import time
 import pygame
-from UtilityClasses import Event
-from button import Button
-from clickable_component import ClickableComponent
+from GUI import GUI
+from utility_classes import Event
 from important_variables import *
-from text_box import TextBox
-from utility_functions import get_card_dictionary
 from velocity_calculator import VelocityCalculator
-from card import Card
+import random
+from copy import deepcopy
+from card_keeper import CardKeeper
+from list_keeper import ListKeeper
 
-readable_file = open("cards.txt", "r")
-cards_dictionary: dict = get_card_dictionary()
-text_color = white
-text_background_color = (160, 82, 45)
+class Main:
+    gui_components = GUI.get_gui_components()
+    # Code below needs all of these GUI componets, so I'm unpacking the list to get them
+    flip_sides_button, card_is_hard_button, show_hard_cards_only_button, term_number_text_box, shuffle_button, cards = gui_components
+    is_showing_terms = True
 
-def get_card_is_hard_list(cards):
-    card_is_hard_list = []
-    for card in cards:
-        card_is_hard_list.append(card.is_hard)
-    return card_is_hard_list
+    max_card_index = len(cards) - 1
+    current_card_index = 0
+    increase_event = Event()
+    decrease_event = Event()
+    is_shuffled = False
+    current_cards = deepcopy(cards)
+    hard_cards = None
+    card = None
 
-def list_to_string(list):
-    string = "["
-    max_index = len(list)
-    for x in range(max_index):
-        # Turns the item into a string
-        item = str(list[x])
+    def run_increase_and_decrease_logic():
+        controlls = pygame.key.get_pressed()
+        increase_button_clicked = controlls[pygame.K_RIGHT] or controlls[pygame.K_d]
+        decrease_buttton_clicked = controlls[pygame.K_LEFT] or controlls[pygame.K_a]
+        Main.increase_event.run(increase_button_clicked)
+        Main.decrease_event.run(decrease_buttton_clicked)
 
-        if x != max_index - 1:
-            string += item + ", "
+        increase_button_is_clicked = Main.increase_event.is_click_event(
+            increase_button_clicked)
+        decrease_buttton_is_clicked = Main.decrease_event.is_click_event(
+            decrease_buttton_clicked)
 
+        if increase_button_is_clicked:
+            Main.current_card_index = CardKeeper.get_next_index(Main.current_card_index, Main.max_card_index)
+
+        if decrease_buttton_is_clicked:
+            Main.current_card_index = CardKeeper.get_previous_index(Main.current_card_index)
+
+        if decrease_buttton_is_clicked or increase_button_is_clicked:
+            Main.card = Main.current_cards[Main.current_card_index]
+            Main.card.is_showing_term = Main.is_showing_terms
+            # So the card_is_hard_button resets when the next card is clicked
+            Main.card_is_hard_button.set_enabled(Main.card.is_hard)
+
+    def run_shuffle_logic():
+        if not Main.shuffle_button.got_clicked():
+            return
+
+        # Code below this point will only run if the suffle button got clicked
+        Main.current_card_index = 0
+        Main.shuffle_button.set_enabled(not Main.shuffle_button.is_enabled)
+
+        if Main.shuffle_button.is_enabled:
+            Main.current_cards = random.shuffle(Main.current_cards)
+        
+        # If only showing hard cards then I'll unshuffle the hard cards
+        elif Main.show_hard_cards_only_button.is_enabled:
+            Main.current_cards = Main.hard_cards
+        
+        # If it isn't showing the hard cards, then it'll unshuffle all the cards
         else:
-            string += item + "]"
-        
-    return string
+            Main.current_cards = Main.cards
+    
+    def run_showing_cards_logic():
+        if Main.show_hard_cards_only_button.got_clicked():
+            Main.show_hard_cards_only_button.set_enabled(not Main.show_hard_cards_only_button.is_enabled)
 
-def string_to_list(string):
-    skip_next_ch = False
-    word = ""
-    list = []
-    for ch in string:
-        if skip_next_ch:
-            skip_next_ch = False
-            continue
+        if Main.show_hard_cards_only_button.is_enabled and Main.show_hard_cards_only_button.got_clicked():
+            Main.current_cards = CardKeeper.get_hard_cards(Main.cards)
+            Main.hard_cards = deepcopy(Main.current_cards)
+            Main.current_card_index = 0
 
-        if ch == "[":
-            continue
-        
-        if ch == ",":
-            skip_next_ch = True
-            list.append(word)
-            word = ""
-            continue
-        
-        word += ch
+        if Main.show_hard_cards_only_button.got_clicked() and not Main.show_hard_cards_only_button.is_enabled:
+            Main.current_cards = Main.cards
 
-        if ch == "]":
-            break
+    def run_flip_sides_logic():
+        if Main.flip_sides_button.got_clicked():
+            Main.is_showing_terms = not Main.is_showing_terms
+            Main.card.is_showing_term = Main.is_showing_terms
+            print(Main.card.is_showing_term)
+    
+    def run_card_is_hard_logic():
+        if Main.card_is_hard_button.got_clicked() and len(Main.current_cards) >= 1:
+            Main.card_is_hard_button.set_enabled(not Main.card_is_hard_button.is_enabled)
+            Main.card.is_hard = Main.card_is_hard_button.is_enabled
+    def run():
+        while True:
+            Main.max_card_index = len(Main.current_cards) - 1
+            # Indexes of lists and what the user would expect to be term number are off by 1
+            Main.term_number_text_box.text = f"Showing Term {Main.current_card_index + 1}/{Main.max_card_index + 1}"
+            # Fill background before drawing stuff
+            game_window.fill(background)
+            start_time = time.time()
 
-    list.append(word)
-    return list
+            if len(Main.current_cards) >= 1:
+                Main.card = Main.current_cards[Main.current_card_index]
 
-def get_cards():
-    # If pickle loads the cards, then this code won't load
-    cards = []
-    for key in cards_dictionary.keys():
-        term = key
-        definition = cards_dictionary[key]
-        card = Card(term, definition, 25, text_color, text_background_color)
-        card.percentage_set_bounds(0, 10, 100, 50)
-        cards.append(card)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    ListKeeper.save(CardKeeper.get_card_is_hard_list(Main.cards))
+                    pygame.quit()
 
-    try: 
-        string = readable_file.read()
-        card_is_hard_list = string_to_list(string)
-        for x in range(len(card_is_hard_list)):
-            cards[x].is_hard = card_is_hard_list[x].__contains__("True")
+            if len(Main.current_cards) >= 1:
+                Main.card.run()
+            
+            for component in Main.gui_components:
+                # Cards are a gui component and are a list, so this prevents an error
+                if (type(component) != list):
+                    component.run()
 
-    except IndexError:
-        print("ERROR")
-        pass
+            functions = [Main.run_card_is_hard_logic, Main.run_flip_sides_logic, Main.run_increase_and_decrease_logic, 
+                         Main.run_showing_cards_logic, Main.run_shuffle_logic]
+            
+            for function in functions:
+                function()
 
-    readable_file.close()
-    return cards
+            pygame.display.update()
+            VelocityCalculator.time = time.time() - start_time
 
-cards = get_cards()
-# So if the user is viewing the terms than they are going to be viewing definitions
-# Same idea, but in reverse if definitions are showing
-
-flip_sides_button = TextBox("Flip Sides", 20, False, text_color, green)
-card_is_hard_button = Button(
-    "Card Is Hard", "Card Isn't Hard", 20, text_color, green)
-show_hard_cards_only_button = Button(
-    "Show All Cards", "Show Only Hard Cards", 15, text_color, green)
-term_number_text_box = TextBox("", 20, False, text_color, green)
-
-card_is_hard_button.percentage_set_bounds(50, 0, 30, 10)
-flip_sides_button.percentage_set_bounds(40, 90, 25, 10)
-show_hard_cards_only_button.percentage_set_bounds(67, 90, 33, 10)
-term_number_text_box.percentage_set_bounds(10, 0, 35, 10)
-card_is_hard_button.set_enabled(cards[0].is_hard)
-# Starts off showing term side and if flip_sides_button is clicked then it shows the definitions
-is_showing_terms = True
-
-max_card_index = len(cards) - 1
-current_card_index = 0
-
-
-def get_hard_cards(cards):
-    hard_cards = []
-    for card in cards:
-        if card.is_hard:
-            hard_cards.append(card)
-    return hard_cards
-
-
-def get_next_index(current_card_index, max_card_index):
-    if current_card_index + 1 <= max_card_index:
-        current_card_index += 1
-
-    else:
-        current_card_index = 0
-
-    return current_card_index
-
-
-def get_previous_index(current_card_index):
-    if current_card_index >= 1:
-        current_card_index -= 1
-
-    return current_card_index
-
-increase_event = Event()
-decrease_event = Event()
-current_cards = cards
-
-while True:
-    max_card_index = len(current_cards) - 1
-    # Indexes of lists and what the user would expect to be term number are off by 1
-    term_number_text_box.text = f"Showing Term {current_card_index + 1}/{max_card_index + 1}"
-    controlls = pygame.key.get_pressed()
-    # Fill background before drawing stuff
-    game_window.fill(background)
-    start_time = time.time()
-    increase_button_clicked = controlls[pygame.K_RIGHT] or controlls[pygame.K_d]
-    decrease_buttton_clicked = controlls[pygame.K_LEFT] or controlls[pygame.K_a]
-    increase_event.run(increase_button_clicked)
-    decrease_event.run(decrease_buttton_clicked)
-
-    if len(current_cards) >= 1:
-        card = current_cards[current_card_index]
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            card_is_hard_list = get_card_is_hard_list(cards)
-            writable_file = open("cards.txt", "w")
-            writable_file.write(list_to_string(card_is_hard_list))
-            pygame.quit()
-
-    if flip_sides_button.got_clicked():
-        is_showing_terms = not is_showing_terms
-
-    # So the arrow keys controll what card the person is on
-    # Also need to set current_card_index to what the functions get_next_index() and get_previous_index() return so the current_card_index changes
-    increase_button_is_clicked = increase_event.is_click_event(
-        increase_button_clicked)
-    decrease_buttton_is_clicked = decrease_event.is_click_event(
-        decrease_buttton_clicked)
-    if increase_button_is_clicked:
-        current_card_index = get_next_index(current_card_index, max_card_index)
-
-    if decrease_buttton_is_clicked:
-        current_card_index = get_previous_index(current_card_index)
-
-    if decrease_buttton_is_clicked or increase_button_is_clicked:
-        card = cards[current_card_index]
-        card.is_showing_term = is_showing_terms
-        # So the card is hard button resets when the next card is clicked
-        card_is_hard_button.set_enabled(card.is_hard)
-
-    if flip_sides_button.got_clicked():
-        card.is_showing_term = is_showing_terms
-
-    if card_is_hard_button.got_clicked() and len(current_cards) >= 1:
-        card_is_hard_button.set_enabled(not card_is_hard_button.is_enabled)
-        card.is_hard = card_is_hard_button.is_enabled
-
-    if show_hard_cards_only_button.got_clicked():
-        show_hard_cards_only_button.set_enabled(
-            not show_hard_cards_only_button.is_enabled)
-
-    if show_hard_cards_only_button.is_enabled and show_hard_cards_only_button.got_clicked():
-        current_cards = get_hard_cards(cards)
-        current_card_index = 0
-
-    elif show_hard_cards_only_button.got_clicked():
-        current_cards = cards
-
-    if len(current_cards) >= 1:
-        card.run()
-    flip_sides_button.run()
-    show_hard_cards_only_button.run()
-    card_is_hard_button.run()
-    term_number_text_box.run()
-    pygame.display.update()
-    VelocityCalculator.time = time.time() - start_time
+Main.run()
