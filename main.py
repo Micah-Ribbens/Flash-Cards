@@ -21,7 +21,7 @@ class Main:
     decrease_event = Event()
     is_shuffled = False
     current_cards = deepcopy(cards)
-    hard_cards = None
+    hard_cards = CardKeeper.get_hard_cards(cards)
     card = None
 
     def run_increase_and_decrease_logic():
@@ -57,7 +57,7 @@ class Main:
         Main.shuffle_button.set_enabled(not Main.shuffle_button.is_enabled)
 
         if Main.shuffle_button.is_enabled:
-            Main.current_cards = random.shuffle(Main.current_cards)
+            random.shuffle(Main.current_cards)
         
         # If only showing hard cards then I'll unshuffle the hard cards
         elif Main.show_hard_cards_only_button.is_enabled:
@@ -65,7 +65,7 @@ class Main:
         
         # If it isn't showing the hard cards, then it'll unshuffle all the cards
         else:
-            Main.current_cards = Main.cards
+            Main.current_cards = deepcopy(Main.cards)
     
     def run_showing_cards_logic():
         if Main.show_hard_cards_only_button.got_clicked():
@@ -77,18 +77,18 @@ class Main:
             Main.current_card_index = 0
 
         if Main.show_hard_cards_only_button.got_clicked() and not Main.show_hard_cards_only_button.is_enabled:
-            Main.current_cards = Main.cards
+            Main.current_cards = deepcopy(Main.cards)
 
     def run_flip_sides_logic():
         if Main.flip_sides_button.got_clicked():
             Main.is_showing_terms = not Main.is_showing_terms
             Main.card.is_showing_term = Main.is_showing_terms
-            print(Main.card.is_showing_term)
     
     def run_card_is_hard_logic():
         if Main.card_is_hard_button.got_clicked() and len(Main.current_cards) >= 1:
             Main.card_is_hard_button.set_enabled(not Main.card_is_hard_button.is_enabled)
             Main.card.is_hard = Main.card_is_hard_button.is_enabled
+
     def run():
         while True:
             Main.max_card_index = len(Main.current_cards) - 1
