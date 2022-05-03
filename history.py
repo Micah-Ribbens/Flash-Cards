@@ -124,4 +124,41 @@ Mary Tudor	Married Philip II of Spain; she is Bloody Mary- she killed 284 people
 Philip II of Spain	The husband of Mary Tudor who tried to take England by force; son of Charles V
 Elizabeth I	The Virgin Queen of England who saved her country from Spain and never married.
 Law about monarchs	All monarchs have to be Anglican
+Book of Common Prayer	Commissioned by Elizabeth I; no prayers to the saints or Mary
+Mary Queen of Scots	Cousin of Elizabeth I who believed she was the rightful queen of England and was beheaded for plotting to kill Elizabeth I
+1588	Defeat of Spanish Armada
+1603	Death of Elizabeth I
+Inquisitions	The church’s formal reaction to heretics
+Ferdinand and Isabella	The monarch that started the Inquisitions
+Heretics	Those who disagree with the catholic church
+Netherlands	First country to offer full religious liberty
+William of Orange 	The liberator of the Netherlands who was raised by Charles V; foster brother of Philip II
+Catherine de Medici 	Mother of the French Kings who died young; she ruled as their regent and ordered the massacre of the Huguenots.
+St Bartholomew’s Day Massacre	30, 000 Huguenots were killed in Paris and the countryside
+Effects of the Reformation 	The church was weakened; individual monarchs were strengthened; modern nation states were created
+1275	Year Marco Polo went to China
+Marco Polo	The Italian explorer who inspired exploration with his book on China
+Motive of Explorers	God, Gold and Glory
+Spices	Most expensive product in the Middle Ages
+Overland trade routes 	Controlled by the Muslims and Italians
+Portugal 	Dominated the world of exploration
+Prince Henry the Navigator 	The Portuguese who started the Age of Exploration with his school for sailors
+His quote	“You cannot find apparel that the hope of reward will not be greater”
+Bartolomeu Dias	Portuguese- accidently found the trade route to India by sailing around the tip of Africa in a storm
+Vasco da Gama	Went all the way to India and opened trade; brought back cargo worth 60 times the cost of the trip
+Manuel I 	King of Portugal; son in law of Ferdinand and Isabella; had a poor relationship with his explorers. Feuded with Magellan over a dead horse
+Christopher Columbus	The Italian explorer; sailed for Spain who tried to reach India by sailing West vs East
+1492	Founding of America
+Ferdinand Magellan 	First man to circumnavigate the globe; although he died on an island
+Charles V	The king who founded Magellan’s trip in order to find wealth to replace the fortune he spent on becoming the Holy Roman Emperor
+Sir Francis Drake	The sea dog who sailed for Queen Elizabeth I and was the second man to circumnavigate the globe.
+James Cook	The explorer who corrected the map of the globe; Went on three trips to the Pacific
+Ptolemy	Geography who lived in the Second century who created most of the problems with the map
+Terra Australis Incognito	Mythical southern continent that was Cook proved didn’t exist
+Cook’s quote 1	Ambition leads me not only farther than any other man has been before me, but as far as I think it possible for man to go
+Cook’s quote 2	Do just once what others say you cannot do and you will never pay attention to their limitations again
+His legacy 	Map of the Pacific
+Cathay	The original name of China; the country that all other countries wanted to trade with
 """
+history_divider = "	"
+history_file_name = "history.txt"

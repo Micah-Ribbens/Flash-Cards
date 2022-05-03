@@ -1,3 +1,4 @@
+from important_variables import file_name
 class ListKeeper:
     def list_to_string(list):
         string = "["
@@ -15,12 +16,12 @@ class ListKeeper:
         return string
 
     def save(list):
-        writable_file = open("cards.txt", "w")
+        writable_file = open(file_name, "w")
         writable_file.write(ListKeeper.list_to_string(list))
         writable_file.close()
     
     def get():
-        readable_file = open("cards.txt", "r")
+        readable_file = open(file_name, "r+")
         string = readable_file.read()
         readable_file.close()
         return ListKeeper.string_to_list(string)

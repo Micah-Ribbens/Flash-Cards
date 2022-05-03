@@ -101,3 +101,6 @@ class Event:
     
     def is_click_event(self, event):
         return event and not self.is_continuous(event)
+
+    def happened_last_cycle(self):
+        return HistoryKeeper.get_last(id(self))

@@ -1,4 +1,5 @@
 from clickable_component import ClickableComponent
+from utility_classes import Event
 from utility_functions import percentage_to_number, draw_font
 from important_variables import *
 import pygame
@@ -16,6 +17,8 @@ class Card(ClickableComponent):
     font_ch_length = 0
     font_ch_height = 0
     is_hard = False
+    index = 0
+    space_event = None
 
     def __init__(self, term, definition, font_size, text_color, background_color):
         self.term, self.definition = self.clean_string(
@@ -26,9 +29,9 @@ class Card(ClickableComponent):
         self.color = background_color
         text = font.render("a", True, background, background)
         text_rect = text.get_rect()
-        # Dividing by 1.2 because not all characters are the same length
         self.font_ch_length = text_rect.width
         self.font_ch_height = text_rect.height
+        self.space_event = Event()
         super().__init__()
 
     def render(self):
@@ -98,10 +101,12 @@ class Card(ClickableComponent):
         return all_words
 
     def run(self):
-        if self.got_clicked():
+        self.space_event.run(pygame.key.get_pressed()[pygame.K_SPACE])
+        if self.got_clicked() or (pygame.key.get_pressed()[pygame.K_SPACE] and not self.space_event.happened_last_cycle()):
             self.flip()
-
+            print("FLIP")
         self.render()
+
 
     def flip(self):
         self.is_showing_term = not self.is_showing_term

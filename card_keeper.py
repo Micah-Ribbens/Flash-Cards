@@ -12,15 +12,26 @@ class CardKeeper:
     def get_cards(text_color, text_background_color):
         cards_dictionary: dict = get_card_dictionary()
         cards = []
+        cards_added = 0
+
         for key in cards_dictionary.keys():
             term = key
             definition = cards_dictionary[key]
+
             card = Card(term, definition, 25, text_color, text_background_color)
             card.percentage_set_bounds(0, 10, 100, 50)
+            card.index = cards_added
             cards.append(card)
+            cards_added += 1
 
         card_is_hard_list = ListKeeper.get()
+        
         for x in range(len(card_is_hard_list)):
+            # The length of the flashcards may not be equal to what is stored, so it won't
+            # Retrieve that information then
+            if len(card_is_hard_list) != len(cards):
+                continue
+
             cards[x].is_hard = card_is_hard_list[x].__contains__("True")
 
         return cards

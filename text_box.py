@@ -32,9 +32,7 @@ class TextBox(ClickableComponent):
         draw_font(self.text, self.font, x_coordinate=self.x_coordinate,
                   y_coordinate=self.y_coordinate, text_color=self.text_color, background_color=self.background_color)
 
-    
-    # TODO fix run in code, so it doesn't do rendering and logic (maybe that isn't so bad?)
-    def run(self):  
+    def run(self):
         self.render()
 
 

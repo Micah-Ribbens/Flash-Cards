@@ -8,6 +8,7 @@ import random
 from copy import deepcopy
 from card_keeper import CardKeeper
 from list_keeper import ListKeeper
+from card import Card
 
 class Main:
     gui_components = GUI.get_gui_components()
@@ -19,6 +20,7 @@ class Main:
     current_card_index = 0
     increase_event = Event()
     decrease_event = Event()
+    h_button_was_clicked = False
     is_shuffled = False
     current_cards = deepcopy(cards)
     hard_cards = CardKeeper.get_hard_cards(cards)
@@ -35,6 +37,7 @@ class Main:
             increase_button_clicked)
         decrease_buttton_is_clicked = Main.decrease_event.is_click_event(
             decrease_buttton_clicked)
+
 
         if increase_button_is_clicked:
             Main.current_card_index = CardKeeper.get_next_index(Main.current_card_index, Main.max_card_index)
@@ -88,6 +91,7 @@ class Main:
         if Main.card_is_hard_button.got_clicked() and len(Main.current_cards) >= 1:
             Main.card_is_hard_button.set_enabled(not Main.card_is_hard_button.is_enabled)
             Main.card.is_hard = Main.card_is_hard_button.is_enabled
+            Main.cards[Main.card.index].is_hard = Main.card_is_hard_button.is_enabled
 
     def run():
         while True:
@@ -110,7 +114,7 @@ class Main:
                 Main.card.run()
             
             for component in Main.gui_components:
-                # Cards are a gui component and are a list, so this prevents an error
+                # Cards are a gui component and cards are a list, so this prevents an error; lists have no attributed run
                 if (type(component) != list):
                     component.run()
 
@@ -119,8 +123,27 @@ class Main:
             
             for function in functions:
                 function()
+            h_button_clicked = pygame.key.get_pressed()[pygame.K_h]
+
+            if not Main.h_button_was_clicked and h_button_clicked:
+                Main.card_is_hard_button.set_enabled(not Main.card_is_hard_button.is_enabled)
+                Main.card.is_hard = Main.card_is_hard_button.is_enabled
+                Main.cards[Main.card.index].is_hard = Main.card_is_hard_button.is_enabled
+
+            Main.h_button_was_clicked = h_button_clicked
 
             pygame.display.update()
             VelocityCalculator.time = time.time() - start_time
+try:
+    Main.run()
+except:
+    pass
 
-Main.run()
+data = ""
+divider = "}"
+for card in Main.hard_cards:
+    card: Card = card
+    data += f"{card.term}{divider}{card.definition}\n"
+file = open("bio_hard.txt", "w+")
+file.write(data)
+print("DONE")
