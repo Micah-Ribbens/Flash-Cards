@@ -104,7 +104,6 @@ class Card(ClickableComponent):
         self.space_event.run(pygame.key.get_pressed()[pygame.K_SPACE])
         if self.got_clicked() or (pygame.key.get_pressed()[pygame.K_SPACE] and not self.space_event.happened_last_cycle()):
             self.flip()
-            print("FLIP")
         self.render()
 
 

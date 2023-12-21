@@ -3,6 +3,7 @@ from button import Button
 from important_variables import *
 from card_keeper import CardKeeper
 class GUI:
+
     def get_gui_components():
         text_color = white
         text_background_color = (160, 82, 45)

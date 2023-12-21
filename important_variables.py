@@ -4,8 +4,8 @@ from biology import *
 from history_shaking_up_the_globe import *
 # from econ import *
 # from history2 import *
-screen_length = 1280
-screen_height = 650
+screen_length = 800
+screen_height = 600
 background = (70, 70, 70)
 game_window = pygame.display.set_mode((screen_length, screen_height))
 white = (255, 255, 255)

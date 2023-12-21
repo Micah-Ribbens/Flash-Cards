@@ -146,4 +146,3 @@ for card in Main.hard_cards:
     data += f"{card.term}{divider}{card.definition}\n"
 file = open("bio_hard.txt", "w+")
 file.write(data)
-print("DONE")
