@@ -1,14 +1,13 @@
 import time
-import pygame
-from GUI import GUI
-from utility_classes import Event
-from important_variables import *
-from velocity_calculator import VelocityCalculator
+from base.GUI import GUI
+from base.utility_classes import Event
+from base.important_variables import *
+from base.velocity_calculator import VelocityCalculator
 import random
 from copy import deepcopy
-from card_keeper import CardKeeper
-from list_keeper import ListKeeper
-from card import Card
+from gui_components.card_keeper import CardKeeper
+from base.list_keeper import ListKeeper
+from gui_components.card import Card
 
 class Main:
     gui_components = GUI.get_gui_components()

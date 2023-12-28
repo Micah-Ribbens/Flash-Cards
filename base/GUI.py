@@ -1,7 +1,7 @@
-from text_box import TextBox
-from button import Button
-from important_variables import *
-from card_keeper import CardKeeper
+from gui_components.text_box import TextBox
+from gui_components.button import Button
+from base.important_variables import *
+from gui_components.card_keeper import CardKeeper
 class GUI:
 
     def get_gui_components():

@@ -1,8 +1,8 @@
-from utility_classes import GameObject, Event
-from utility_functions import percentage_to_number
-from important_variables import *
-from velocity_calculator import VelocityCalculator
-from utility_classes import HistoryKeeper
+from base.utility_classes import GameObject, Event
+from base.utility_functions import percentage_to_number
+from base.important_variables import *
+from base.velocity_calculator import VelocityCalculator
+from base.utility_classes import HistoryKeeper
 import pygame
 
 

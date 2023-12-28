@@ -1,8 +1,6 @@
 import pygame
-from important_variables import game_window
-from velocity_calculator import VelocityCalculator
-from important_variables import screen_height, background, screen_length, game_window
-from utility_functions import deepcopy, percentage_to_number
+from base.important_variables import screen_height, background, screen_length, game_window
+from base.utility_functions import deepcopy, percentage_to_number
 
 
 class Segment:

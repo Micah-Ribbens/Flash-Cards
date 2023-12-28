@@ -1,4 +1,4 @@
-from important_variables import file_name
+from base.important_variables import file_name
 class ListKeeper:
     def list_to_string(list):
         string = "["

@@ -1,7 +1,7 @@
-from clickable_component import ClickableComponent
-from utility_classes import Event
-from utility_functions import percentage_to_number, draw_font
-from important_variables import *
+from gui_components.clickable_component import ClickableComponent
+from base.utility_classes import Event
+from base.utility_functions import draw_font
+from base.important_variables import *
 import pygame
 pygame.init()
 

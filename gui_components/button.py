@@ -1,5 +1,4 @@
-from clickable_component import ClickableComponent
-from text_box import TextBox
+from gui_components.text_box import TextBox
 
 
 class Button(TextBox):

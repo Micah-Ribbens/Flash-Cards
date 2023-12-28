@@ -1,6 +1,7 @@
-from utility_functions import *
-from card import Card
-from list_keeper import *
+from base.utility_functions import *
+from gui_components.card import Card
+from base.list_keeper import *
+
 class CardKeeper:
     def get_card_is_hard_list(cards):
         card_is_hard_list = []

@@ -1,10 +1,8 @@
 Finished Development: 05/02/2022
 
-First three years of programming
-
 # Summary
 This was an application I made that was an alternative to Quizlet. The application could be used offline and I thought 
-that it was quicker to use than Quizlet. I also had full control of all the features. The user could modify the application 
+that it was quicker to use than Quizlet. I also had full control over all the features. The user could modify the application 
 by typing in the terms in a text file. Text files are quicker to modify than GUI's generally, which is why I had it set 
 up that way. Another reason I made the application was because my history teacher, Ms. Herring, had us type out the study 
 guide. Since there were at least 100 terms, I did not want to have to retype those terms into a flashcard application like 
@@ -21,6 +19,12 @@ Everything else should behave as expected, but for the sake of clarity, I will e
 button will shuffle the cards. The 'Flip Sides' button will toggle between showing the term and the definition first. The 
 'Show Only Hard Cards' button will toggle between showing all the cards and only the cards that the user said were 'hard.'
 
+# Application Image
+![Application Image](documentation/Application Image.png)
+
 # How to Run
 - Download pygame with 'pip install pygame'
 - Run the 'main.py' file from the root directory of this project
+
+# Modifications 12/21/2023
+- Put all the python files into modules to make the code more readable (originally all files were in the root directory)

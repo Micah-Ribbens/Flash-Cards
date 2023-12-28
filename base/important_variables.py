@@ -1,9 +1,6 @@
 import pygame
-from biology import *
-# from history import *
-from history_shaking_up_the_globe import *
-# from econ import *
-# from history2 import *
+from example_terms import *
+
 screen_length = 800
 screen_height = 600
 background = (70, 70, 70)
@@ -21,6 +18,6 @@ magenta = (255, 0, 255)
 cyan = (0, 255, 255)
 orange = (255, 100, 0)
 
-terms = biology_terms
-divider = biology_divider
-file_name = biology_file_name
+terms = example_terms
+divider = example_divider
+file_name = example_file_name
