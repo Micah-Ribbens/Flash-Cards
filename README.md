@@ -20,7 +20,7 @@ button will shuffle the cards. The 'Flip Sides' button will toggle between showi
 'Show Only Hard Cards' button will toggle between showing all the cards and only the cards that the user said were 'hard.'
 
 # Application Image
-![Application Image](documentation/Application Image.png)
+![Application Image](documentation/Application%20Image.png)
 
 # How to Run
 - Download pygame with 'pip install pygame'
